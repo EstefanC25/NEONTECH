@@ -1,0 +1,461 @@
+/* ===== VARIABLES DE COLOR (se reutilizan en todo el archivo) ===== */
+:root {
+  --bg-void: #05060f;           /* Color de fondo principal, casi negro con tinte azul */
+  --bg-panel: #0d1224;          /* Color de fondo de las tarjetas (parte oscura del degradado) */
+  --bg-panel-2: #10172e;        /* Color de fondo de las tarjetas (parte clara del degradado) */
+  --cyan: #35e7ff;              /* Acento neón cian, tomado del logo */
+  --magenta: #ff3fc6;           /* Acento neón magenta, tomado del logo */
+  --text: #eaf6ff;              /* Color de texto principal (blanco azulado) */
+  --muted: #7c8bb0;             /* Color de texto secundario/apagado */
+  --border: rgba(53, 231, 255, 0.18); /* Color de borde sutil con transparencia */
+}
+
+/* ===== RESET BÁSICO ===== */
+* {
+  box-sizing: border-box;       /* El padding y el borde no aumentan el tamaño total del elemento */
+  margin: 0;                    /* Quita el margen por defecto que trae cada navegador */
+  padding: 0;                   /* Quita el padding por defecto que trae cada navegador */
+}
+
+/* ===== ESTILO GENERAL DEL BODY ===== */
+body {
+  background: var(--bg-void);       /* Aplica el color de fondo oscuro definido arriba */
+  color: var(--text);               /* Color de texto por defecto para toda la página */
+  font-family: 'Inter', sans-serif; /* Tipografía de cuerpo (texto normal) */
+  min-height: 100vh;                /* La página ocupa mínimo toda la altura de la pantalla */
+  overflow-x: hidden;               /* Evita que aparezca scroll horizontal por los brillos de fondo */
+}
+
+/* ===== CAPA DE RESPLANDOR AMBIENTAL DE FONDO ===== */
+body::before {
+  content: "";                  /* Elemento decorativo vacío (no tiene texto) */
+  position: fixed;              /* Se queda fijo en pantalla aunque se haga scroll */
+  inset: 0;                     /* Ocupa toda la pantalla (top, right, bottom, left = 0) */
+  background:
+    radial-gradient(ellipse 700px 500px at 15% 0%, rgba(53,231,255,0.10), transparent 60%),  /* Resplandor cian arriba a la izquierda */
+    radial-gradient(ellipse 700px 500px at 90% 20%, rgba(255,63,198,0.08), transparent 60%);  /* Resplandor magenta arriba a la derecha */
+  pointer-events: none;         /* Permite hacer clic "a través" de esta capa decorativa */
+  z-index: 0;                   /* La deja detrás de todo el contenido real */
+}
+
+/* ===== ENCABEZADO (LOGO + TÍTULO) ===== */
+header {
+  position: relative;           /* Necesario para que z-index funcione correctamente */
+  z-index: 1;                   /* Se muestra por encima de la capa de resplandor de fondo */
+  text-align: center;           /* Centra todo el contenido del encabezado */
+  padding: 4rem 1.5rem 3rem;    /* Espacio interno: arriba, lados, abajo */
+}
+
+/* ===== FILA QUE CONTIENE EL LOGO Y EL BLOQUE DE TEXTO (LADO A LADO) ===== */
+.header-row {
+  display: flex;                /* Coloca el logo y el texto en una fila horizontal */
+  align-items: center;          /* Centra verticalmente el logo respecto al texto */
+  justify-content: center;      /* Centra todo el conjunto horizontalmente en la pantalla */
+  gap: 1.5rem;                  /* Espacio entre el logo y el bloque de texto */
+  flex-wrap: wrap;              /* Si no cabe en pantallas angostas, el texto pasa debajo del logo */
+}
+
+/* ===== BLOQUE DE TEXTO (TÍTULO + TAGLINE), ALINEADO A LA IZQUIERDA JUNTO AL LOGO ===== */
+.header-text {
+  text-align: left;             /* El texto se alinea a la izquierda dentro de su propio bloque */
+}
+
+/* ===== ISOTIPO (AHORA ES UNA IMAGEN PNG, NO UN SVG) ===== */
+.mark {
+  width: 84px;                  /* Ancho del logo */
+  height: 84px;                 /* Alto del logo */
+  flex-shrink: 0;                /* Evita que el logo se encoja si el espacio es reducido */
+  object-fit: contain;           /* La imagen se ajusta al recuadro sin deformarse */
+  filter: drop-shadow(0 0 10px rgba(53,231,255,0.5)); /* Efecto de brillo/resplandor alrededor del logo */
+}
+
+/* ===== NOMBRE DE LA MARCA "NEON TECH" ===== */
+.brand {
+  font-family: 'Orbitron', sans-serif;   /* Tipografía futurista para el título principal */
+  font-weight: 800;                       /* Grosor extra negrita */
+  font-size: clamp(2.2rem, 7vw, 3.6rem); /* Tamaño responsivo: mínimo, ideal según pantalla, máximo */
+  letter-spacing: 0.08em;                /* Espaciado entre letras, look más "tech" */
+  line-height: 1.1;                       /* Espacio entre líneas si el texto se parte en dos */
+}
+
+/* ===== PALABRA "NEON" DENTRO DEL TÍTULO ===== */
+.brand .neon {
+  color: var(--cyan);           /* Color cian para esta palabra */
+  text-shadow: 0 0 18px rgba(53,231,255,0.65), 0 0 40px rgba(53,231,255,0.25); /* Doble resplandor: uno cercano, uno más difuso */
+}
+
+/* ===== PALABRA "TECH" DENTRO DEL TÍTULO ===== */
+.brand .tech {
+  color: var(--magenta);        /* Color magenta para esta palabra */
+  text-shadow: 0 0 18px rgba(255,63,198,0.65), 0 0 40px rgba(255,63,198,0.25); /* Mismo efecto de resplandor pero en magenta */
+}
+
+/* ===== SUBTÍTULO DEBAJO DEL LOGO ===== */
+.tagline {
+  margin-top: 0.9rem;                    /* Separación respecto al título de arriba */
+  font-family: 'Rajdhani', sans-serif;   /* Tipografía secundaria, más condensada/técnica */
+  font-weight: 600;                       /* Semi-negrita */
+  letter-spacing: 0.35em;                /* Mucho espacio entre letras, estilo "etiqueta" */
+  font-size: 0.8rem;                      /* Tamaño pequeño */
+  color: var(--muted);                    /* Color apagado, no compite con el título */
+  text-transform: uppercase;              /* Todo en mayúsculas */
+}
+
+/* ===== LÍNEA DIVISORA CON DEGRADADO DE COLOR ANIMADO ===== */
+.divider {
+  width: min(700px, 90%);       /* Ancho: 700px como máximo, o 90% de la pantalla si es más angosta */
+  height: 1px;                  /* Línea muy delgada */
+  margin: 1.6rem auto 0;        /* Espacio arriba y centrada horizontalmente */
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent); /* Degradado transparente-cian-magenta-transparente */
+  background-size: 250% 100%;   /* El degradado es más ancho que la línea, para poder desplazarlo */
+  opacity: 0.6;                 /* Un poco translúcida para que no se vea muy dura */
+}
+
+/* ===== ANIMACIÓN DE DESPLAZAMIENTO DEL BRILLO (solo si el usuario no pidió reducir movimiento) ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .divider {
+    animation: slide-glow 4s linear infinite; /* Aplica la animación de desplazamiento en bucle continuo */
+  }
+}
+
+/* ===== DEFINICIÓN DE LA ANIMACIÓN DE DESPLAZAMIENTO ===== */
+@keyframes slide-glow {
+  0%   { background-position: 100% 0; } /* El brillo empieza a la derecha */
+  100% { background-position: 0% 0; }   /* El brillo termina a la izquierda, y el bucle reinicia */
+}
+
+/* ===== CONTENEDOR PRINCIPAL DE LA PÁGINA ===== */
+main {
+  position: relative;           /* Necesario para el z-index */
+  z-index: 1;                   /* Por encima del fondo decorativo */
+  max-width: 1180px;            /* Ancho máximo del contenido, para que no se estire demasiado en pantallas grandes */
+  margin: 0 auto;               /* Centra el contenedor horizontalmente */
+  padding: 1rem 1.5rem 5rem;    /* Espacio interno arriba, lados y abajo */
+}
+
+/* ===== ETIQUETA PEQUEÑA "CATÁLOGO" ===== */
+.section-label {
+  font-family: 'Rajdhani', sans-serif;  /* Misma tipografía técnica del tagline */
+  font-weight: 600;                      /* Semi-negrita */
+  letter-spacing: 0.25em;               /* Espaciado entre letras */
+  font-size: 2rem;                    /* Tamaño pequeño, es solo una etiqueta */
+  color: var(--cyan);                    /* Color cian para destacarla */
+  text-transform: uppercase;             /* Todo en mayúsculas */
+  margin-bottom: 1.2rem;                /* Espacio antes de la cuadrícula de productos */
+}
+
+/* ===== CUADRÍCULA DE PRODUCTOS ===== */
+.grid {
+  display: grid;                                          /* Activa el sistema de cuadrícula CSS */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* Columnas automáticas de mínimo 260px, se ajustan solas según el ancho */
+  gap: 1.5rem;                                            /* Espacio entre tarjetas */
+}
+
+/* ===== TARJETA DE PRODUCTO ===== */
+.card {
+  position: relative;           /* Necesario para poder posicionar las esquinas decorativas (::before/::after) */
+  background: linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel)); /* Degradado sutil de arriba hacia abajo */
+  border: 1px solid var(--border); /* Borde delgado y tenue */
+  border-radius: 4px;           /* Esquinas ligeramente redondeadas (look técnico, no muy suave) */
+  padding: 1.6rem 1.4rem 1.4rem; /* Espacio interno de la tarjeta */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; /* Animación suave al pasar el mouse */
+}
+
+/* ===== EFECTO AL PASAR EL MOUSE SOBRE LA TARJETA ===== */
+.card:hover {
+  transform: translateY(-4px);  /* La tarjeta "flota" un poco hacia arriba */
+  border-color: rgba(53,231,255,0.5); /* El borde se ilumina en cian */
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(53,231,255,0.15); /* Sombra debajo + resplandor sutil */
+}
+
+/* ===== ESQUINA SUPERIOR IZQUIERDA TIPO "CIRCUITO" ===== */
+.card::before {
+  content: "";                  /* Elemento decorativo vacío */
+  position: absolute;           /* Se posiciona sobre la esquina de la tarjeta */
+  width: 18px;                  /* Tamaño de la esquina */
+  height: 18px;
+  border-top: 2px solid var(--cyan);   /* Línea superior en cian */
+  border-left: 2px solid var(--cyan);  /* Línea izquierda en cian */
+  top: -1px;                    /* Ajuste fino para que quede pegada al borde */
+  left: -1px;
+  opacity: 0.8;                 /* Ligeramente translúcida */
+}
+
+/* ===== ESQUINA INFERIOR DERECHA TIPO "CIRCUITO" (usa el ::after de la misma tarjeta) ===== */
+.card::after {
+  content: "";                  /* Elemento decorativo vacío */
+  position: absolute;           /* Se posiciona sobre la esquina de la tarjeta */
+  width: 18px;
+  height: 18px;
+  top: auto;                    /* Anula el "top" para poder usar "bottom" en su lugar */
+  left: auto;                   /* Anula el "left" para poder usar "right" en su lugar */
+  bottom: -1px;                 /* Pegada a la esquina inferior */
+  right: -1px;                  /* Pegada a la esquina derecha */
+  border: none;                 /* Quita cualquier borde general */
+  border-bottom: 2px solid var(--magenta); /* Línea inferior en magenta (contraste con la esquina de arriba) */
+  border-right: 2px solid var(--magenta);  /* Línea derecha en magenta */
+}
+
+/* ===== CONTENEDOR DEL ÍCONO O FOTO DE CADA PRODUCTO ===== */
+.card-icon {
+  width: 100%;                  /* Ocupa todo el ancho disponible de la tarjeta (para que las fotos se vean grandes) */
+  height: 160px;                 /* Alto fijo del recuadro, igual para íconos y fotos */
+  margin-bottom: 1rem;          /* Espacio antes del nombre del producto */
+  color: var(--cyan);           /* Color del ícono cuando es SVG (los SVG usan "currentColor") */
+  display: flex;                 /* Permite centrar el contenido dentro del recuadro */
+  align-items: center;           /* Centra verticalmente */
+  justify-content: center;       /* Centra horizontalmente */
+}
+
+/* ===== AJUSTE PARA QUE EL SVG NO SE VEA SOBREDIMENSIONADO DENTRO DEL RECUADRO GRANDE ===== */
+.card-icon svg {
+  width: 46px;                  /* Tamaño fijo del ícono, aunque el recuadro sea más grande */
+  height: 46px;                 /* Tamaño fijo del ícono */
+}
+
+/* ===== FOTO REAL DE PRODUCTO DENTRO DEL RECUADRO DEL ÍCONO (cuando el producto tiene "imagen") ===== */
+.card-icon img {
+  width: 100%;                  /* La imagen ocupa todo el ancho del recuadro */
+  height: 100%;                 /* La imagen ocupa todo el alto del recuadro */
+  object-fit: cover;            /* Recorta la imagen para llenar el espacio sin deformarse */
+  border-radius: 4px;           /* Esquinas suaves, iguales al resto de la tarjeta */
+}
+
+/* ===== RECUADRO DEL CARRUSEL (varias fotos deslizables) ===== */
+.card-icon.carousel {
+  position: relative;           /* Necesario para posicionar las flechas y los puntos encima de las fotos */
+  overflow: hidden;             /* Oculta las fotos que están fuera del recuadro visible */
+  border-radius: 4px;           /* Esquinas suaves, iguales al resto de la tarjeta */
+}
+
+/* ===== PISTA QUE CONTIENE TODAS LAS FOTOS EN FILA ===== */
+.carousel-track {
+  display: flex;                /* Coloca todas las fotos una al lado de la otra */
+  width: 100%;                  /* Ocupa el ancho del recuadro */
+  height: 100%;                 /* Ocupa el alto del recuadro */
+  transition: transform 0.35s ease; /* Animación suave al deslizar entre fotos */
+}
+
+/* ===== CADA FOTO DENTRO DEL CARRUSEL ===== */
+.carousel-track img {
+  width: 100%;                  /* Cada foto ocupa el ancho completo del recuadro */
+  height: 100%;                 /* Cada foto ocupa el alto completo del recuadro */
+  flex-shrink: 0;                /* Evita que las fotos se encojan para caber varias a la vez */
+  object-fit: cover;            /* Recorta la foto para llenar el espacio sin deformarse */
+}
+
+/* ===== FLECHAS PARA DESLIZAR EL CARRUSEL (ESTILO BASE, IZQUIERDA Y DERECHA) ===== */
+.carousel-btn {
+  position: absolute;           /* Se posiciona flotando sobre las fotos */
+  top: 50%;                     /* A la mitad de la altura del recuadro */
+  transform: translateY(-50%); /* Se centra verticalmente de forma exacta */
+  width: 26px;                  /* Tamaño del botón circular */
+  height: 26px;
+  border-radius: 50%;           /* Forma circular */
+  border: 1px solid var(--cyan); /* Borde cian, igual al resto del tema */
+  background: rgba(5, 6, 15, 0.65); /* Fondo oscuro semitransparente para que resalte sobre la foto */
+  color: var(--cyan);           /* Color de la flecha (texto) */
+  font-size: 15px;              /* Tamaño del símbolo de la flecha */
+  line-height: 1;               /* Evita que el símbolo quede descentrado verticalmente */
+  cursor: pointer;              /* Cursor de mano al pasar por encima */
+  display: flex;                /* Permite centrar el símbolo dentro del botón */
+  align-items: center;          /* Centra verticalmente el símbolo */
+  justify-content: center;      /* Centra horizontalmente el símbolo */
+  z-index: 2;                   /* Por encima de las fotos y de los puntos */
+  transition: background 0.2s, box-shadow 0.2s; /* Animación suave al pasar el mouse */
+}
+
+/* ===== EFECTO AL PASAR EL MOUSE SOBRE UNA FLECHA DEL CARRUSEL ===== */
+.carousel-btn:hover {
+  background: var(--cyan);      /* Se llena de color cian */
+  color: var(--bg-void);        /* El símbolo pasa a oscuro para mantener contraste */
+  box-shadow: 0 0 12px rgba(53,231,255,0.6); /* Resplandor alrededor del botón */
+}
+
+/* ===== POSICIÓN DE LA FLECHA IZQUIERDA ("ANTERIOR") ===== */
+.carousel-btn.prev {
+  left: 6px;                    /* Pegada al borde izquierdo del recuadro */
+}
+
+/* ===== POSICIÓN DE LA FLECHA DERECHA ("SIGUIENTE") ===== */
+.carousel-btn.next {
+  right: 6px;                   /* Pegada al borde derecho del recuadro */
+}
+
+/* ===== CONTENEDOR DE LOS PUNTOS INDICADORES (ABAJO DEL CARRUSEL) ===== */
+.carousel-dots {
+  position: absolute;           /* Se posiciona flotando sobre las fotos */
+  bottom: 8px;                  /* Cerca del borde inferior del recuadro */
+  left: 0;                      /* Se extiende de lado a lado para poder centrar los puntos */
+  right: 0;
+  display: flex;                /* Coloca los puntos en fila */
+  justify-content: center;      /* Centra los puntos horizontalmente */
+  gap: 6px;                     /* Espacio entre cada punto */
+  z-index: 2;                   /* Por encima de las fotos */
+}
+
+/* ===== CADA PUNTO INDICADOR (INACTIVO POR DEFECTO) ===== */
+.dot {
+  width: 6px;                   /* Tamaño pequeño del punto */
+  height: 6px;
+  border-radius: 50%;           /* Forma circular */
+  background: rgba(234, 246, 255, 0.4); /* Color blanco azulado tenue cuando no es la foto activa */
+  transition: background 0.2s;  /* Animación suave al cambiar de foto activa */
+}
+
+/* ===== PUNTO INDICADOR DE LA FOTO ACTUALMENTE VISIBLE ===== */
+.dot.active {
+  background: var(--cyan);      /* Se resalta en color cian */
+}
+
+/* ===== NOMBRE DEL PRODUCTO ===== */
+.card h3 {
+  font-family: 'Rajdhani', sans-serif; /* Tipografía técnica/condensada */
+  font-weight: 700;                     /* Negrita */
+  font-size: 1.15rem;                   /* Tamaño del título del producto */
+  letter-spacing: 0.02em;              /* Espaciado sutil entre letras */
+  margin-bottom: 0.35rem;              /* Espacio antes de las especificaciones */
+}
+
+/* ===== LISTA DE ESPECIFICACIONES DEL PRODUCTO (una debajo de otra) ===== */
+.card ul.specs {
+  list-style: none;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.card ul.specs li {
+  position: relative;
+  padding-left: 14px;
+  margin-bottom: 3px;
+}
+
+.card ul.specs li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--cyan);
+}
+
+/* ===== PRECIO DEL PRODUCTO ===== */
+.price {
+  font-family: 'Orbitron', sans-serif; /* Misma tipografía futurista del título principal */
+  font-weight: 600;                     /* Semi-negrita */
+  font-size: 1.2rem;                    /* Tamaño destacado, es información importante */
+  color: var(--text);                   /* Color de texto principal (blanco azulado) */
+  margin-bottom: 1.1rem;               /* Espacio antes del botón de WhatsApp */
+}
+
+/* ===== TEXTO PEQUEÑO "COP" JUNTO AL PRECIO ===== */
+.price small {
+  font-family: 'Inter', sans-serif; /* Tipografía normal, no la futurista */
+  font-size: 0.7rem;                 /* Muy pequeño, es solo la unidad monetaria */
+  color: var(--muted);               /* Color apagado */
+  font-weight: 400;                  /* Peso normal, sin negrita */
+  margin-left: 4px;                  /* Pequeño espacio respecto al número del precio */
+}
+
+/* ===== BOTÓN "CONSULTAR" DE CADA TARJETA ===== */
+.btn-wa {
+  display: flex;                 /* Permite alinear el ícono y el texto en fila */
+  align-items: center;           /* Centra verticalmente ícono y texto */
+  justify-content: center;       /* Centra horizontalmente el contenido del botón */
+  gap: 8px;                      /* Espacio entre el ícono y el texto */
+  width: 100%;                   /* El botón ocupa todo el ancho de la tarjeta */
+  padding: 10px 12px;            /* Espacio interno del botón */
+  background: transparent;       /* Fondo transparente por defecto */
+  border: 1px solid var(--cyan); /* Borde cian, así se ve como botón "outline" */
+  color: var(--cyan);            /* Texto e ícono en color cian */
+  font-family: 'Rajdhani', sans-serif; /* Tipografía técnica */
+  font-weight: 600;                     /* Semi-negrita */
+  font-size: 0.85rem;                   /* Tamaño del texto del botón */
+  letter-spacing: 0.05em;              /* Espaciado entre letras */
+  text-transform: uppercase;           /* Texto en mayúsculas */
+  border-radius: 3px;                  /* Esquinas casi rectas, look técnico */
+  cursor: pointer;                     /* Cursor de "mano" al pasar por encima */
+  text-decoration: none;               /* Quita el subrayado (es un link <a>) */
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s; /* Animación suave al pasar el mouse */
+}
+
+/* ===== EFECTO AL PASAR EL MOUSE SOBRE EL BOTÓN "CONSULTAR" ===== */
+.btn-wa:hover {
+  background: var(--cyan);       /* El fondo se llena de color cian */
+  color: var(--bg-void);         /* El texto pasa a oscuro para mantener contraste */
+  box-shadow: 0 0 18px rgba(53,231,255,0.5); /* Resplandor alrededor del botón */
+}
+
+/* ===== TAMAÑO DEL ÍCONO DE WHATSAPP DENTRO DEL BOTÓN ===== */
+.btn-wa svg {
+  width: 16px;                   /* Ancho del ícono */
+  height: 16px;                  /* Alto del ícono */
+}
+
+/* ===== BOTÓN FLOTANTE GENERAL DE WHATSAPP ===== */
+.float-wa {
+  position: fixed;               /* Se queda fijo en pantalla aunque se haga scroll */
+  bottom: 22px;                  /* Distancia desde abajo */
+  right: 22px;                   /* Distancia desde la derecha */
+  z-index: 5;                    /* Por encima de todo el contenido de la página */
+  display: flex;                 /* Alinea ícono y texto en fila */
+  align-items: center;           /* Centra verticalmente */
+  gap: 10px;                     /* Espacio entre ícono y texto */
+  padding: 13px 20px;            /* Espacio interno del botón */
+  background: var(--bg-panel);   /* Fondo oscuro, igual al de las tarjetas */
+  border: 1px solid var(--magenta); /* Borde magenta, para diferenciarlo de los botones cian de las tarjetas */
+  color: var(--text);            /* Color del texto */
+  font-family: 'Rajdhani', sans-serif; /* Tipografía técnica */
+  font-weight: 700;                     /* Negrita */
+  font-size: 0.85rem;                   /* Tamaño del texto */
+  letter-spacing: 0.05em;              /* Espaciado entre letras */
+  text-transform: uppercase;           /* Texto en mayúsculas */
+  border-radius: 30px;                 /* Muy redondeado, forma de "píldora" */
+  text-decoration: none;               /* Quita el subrayado (es un link <a>) */
+  box-shadow: 0 0 22px rgba(255,63,198,0.35); /* Resplandor magenta permanente */
+  transition: box-shadow 0.2s, transform 0.15s; /* Animación suave al pasar el mouse */
+}
+
+/* ===== EFECTO AL PASAR EL MOUSE SOBRE EL BOTÓN FLOTANTE ===== */
+.float-wa:hover {
+  box-shadow: 0 0 32px rgba(255,63,198,0.55); /* El resplandor se intensifica */
+  transform: translateY(-2px);                 /* El botón sube ligeramente */
+}
+
+/* ===== TAMAÑO DEL ÍCONO DENTRO DEL BOTÓN FLOTANTE ===== */
+.float-wa svg {
+  width: 20px;                   /* Ancho del ícono */
+  height: 20px;                  /* Alto del ícono */
+  color: var(--magenta);         /* Color magenta para el ícono */
+}
+
+/* ===== PIE DE PÁGINA ===== */
+footer {
+  position: relative;            /* Necesario para el z-index */
+  z-index: 1;                    /* Por encima del fondo decorativo */
+  text-align: center;            /* Centra el texto */
+  padding: 2rem 1.5rem 3rem;    /* Espacio interno */
+  font-size: 0.75rem;            /* Texto pequeño */
+  color: var(--muted);           /* Color apagado */
+  font-family: 'Rajdhani', sans-serif; /* Tipografía técnica */
+  letter-spacing: 0.1em;        /* Espaciado entre letras */
+}
+
+/* ===== ANIMACIÓN DE PULSO DEL ISOTIPO (solo si el usuario no pidió reducir movimiento) ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .mark {
+    animation: pulse-glow 3.5s ease-in-out infinite; /* Aplica la animación de brillo definida abajo, en bucle */
+  }
+}
+
+/* ===== DEFINICIÓN DE LA ANIMACIÓN DE PULSO ===== */
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(53,231,255,0.5)); } /* Brillo normal al inicio y al final */
+  50% { filter: drop-shadow(0 0 18px rgba(53,231,255,0.8)); }      /* Brillo más intenso a la mitad de la animación */
+}
+
+/* ===== ESTILO DE ENFOQUE VISIBLE (ACCESIBILIDAD, NAVEGACIÓN CON TECLADO) ===== */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--cyan); /* Contorno cian visible al navegar con la tecla Tab */
+  outline-offset: 2px;            /* Separa un poco el contorno del elemento */
+}
