@@ -33,6 +33,15 @@
 
 <footer>© NEON TECH — Catálogo de tecnología</footer>
 
+<!-- ===== LIGHTBOX: recuadro que muestra la imagen ampliada al hacer clic ===== -->
+<div id="lightbox-overlay" class="lightbox-overlay">
+  <span class="lightbox-close" id="lightboxClose" aria-label="Cerrar">&times;</span>
+  <button type="button" class="lightbox-nav prev" id="lightboxPrev" aria-label="Imagen anterior">‹</button>
+  <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada del producto">
+  <button type="button" class="lightbox-nav next" id="lightboxNext" aria-label="Imagen siguiente">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
 <script>
   // ⚠️ Cambia este número por el real (indicativo de país + número, sin espacios ni signos)
   const NUMERO_WHATSAPP = "573102598307";
@@ -101,27 +110,28 @@
 
   // Arma el contenido visual de cada tarjeta: carrusel de fotos, una sola foto, o ícono
   function renderVisual(p) {
-    if (p.imagenes && p.imagenes.length > 1) {
+    // Lista unificada de fotos del producto (viene de "imagenes" o de "imagen"), usada también por el lightbox
+    const fotos = (p.imagenes && p.imagenes.length) ? p.imagenes : (p.imagen ? [p.imagen] : null);
+    // Se guarda como atributo data-images en JSON, así el lightbox sabe entre qué fotos navegar
+    const dataImagenes = fotos ? ` data-images='${JSON.stringify(fotos)}'` : '';
+
+    if (fotos && fotos.length > 1) {
       // Varias imágenes: arma el carrusel con flechas y puntos indicadores
       return `
-        <div class="card-icon carousel">
+        <div class="card-icon carousel"${dataImagenes}>
           <div class="carousel-track">
-            ${p.imagenes.map(img => `<img src="${img}" alt="${p.nombre}">`).join('')}
+            ${fotos.map(img => `<img src="${img}" alt="${p.nombre}">`).join('')}
           </div>
           <button type="button" class="carousel-btn prev" aria-label="Imagen anterior">‹</button>
           <button type="button" class="carousel-btn next" aria-label="Imagen siguiente">›</button>
           <div class="carousel-dots">
-            ${p.imagenes.map((_, i) => `<span class="dot${i === 0 ? ' active' : ''}"></span>`).join('')}
+            ${fotos.map((_, i) => `<span class="dot${i === 0 ? ' active' : ''}"></span>`).join('')}
           </div>
         </div>`;
     }
-    if (p.imagenes && p.imagenes.length === 1) {
-      // Una sola imagen dentro del arreglo "imagenes": se muestra igual que "imagen"
-      return `<div class="card-icon"><img src="${p.imagenes[0]}" alt="${p.nombre}"></div>`;
-    }
-    if (p.imagen) {
-      // Producto con una sola foto (campo "imagen")
-      return `<div class="card-icon"><img src="${p.imagen}" alt="${p.nombre}"></div>`;
+    if (fotos && fotos.length === 1) {
+      // Una sola imagen (venga de "imagenes" o de "imagen")
+      return `<div class="card-icon"${dataImagenes}><img src="${fotos[0]}" alt="${p.nombre}"></div>`;
     }
     // Producto sin fotos: usa el ícono SVG genérico
     return `<div class="card-icon">${p.icono}</div>`;
@@ -162,6 +172,92 @@
     if (!boton) return;
     const carousel = boton.closest(".carousel");
     moverCarrusel(carousel, boton.classList.contains("next") ? 1 : -1);
+  });
+
+  // ===== LIGHTBOX: ampliar imagen al hacer clic, con navegación entre fotos =====
+  const lightboxOverlay = document.getElementById("lightbox-overlay");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const lightboxClose = document.getElementById("lightboxClose");
+  const lightboxPrev = document.getElementById("lightboxPrev");
+  const lightboxNext = document.getElementById("lightboxNext");
+  const lightboxCounter = document.getElementById("lightboxCounter");
+
+  let lightboxFotos = [];   // Todas las fotos del producto actualmente abierto
+  let lightboxIndice = 0;   // Foto que se está mostrando en este momento
+  let lightboxAlt = "";     // Texto alternativo (nombre del producto)
+
+  // Pinta en pantalla la foto correspondiente al índice actual
+  function pintarLightbox() {
+    lightboxImg.src = lightboxFotos[lightboxIndice];
+    lightboxImg.alt = lightboxAlt;
+    const varias = lightboxFotos.length > 1;
+    // Las flechas y el contador solo se muestran si el producto tiene más de una foto
+    lightboxPrev.style.display = varias ? "flex" : "none";
+    lightboxNext.style.display = varias ? "flex" : "none";
+    lightboxCounter.style.display = varias ? "block" : "none";
+    lightboxCounter.textContent = `${lightboxIndice + 1} / ${lightboxFotos.length}`;
+  }
+
+  function abrirLightbox(fotos, indiceInicial, alt) {
+    lightboxFotos = fotos;
+    lightboxIndice = indiceInicial;
+    lightboxAlt = alt || "Vista ampliada del producto";
+    pintarLightbox();
+    lightboxOverlay.classList.add("active");
+  }
+
+  function cerrarLightbox() {
+    lightboxOverlay.classList.remove("active");
+    lightboxImg.src = ""; // libera memoria de la imagen mientras está cerrado
+  }
+
+  // Avanza (1) o retrocede (-1) entre las fotos del producto abierto en el lightbox
+  function moverLightbox(direccion) {
+    if (lightboxFotos.length < 2) return;
+    lightboxIndice = (lightboxIndice + direccion + lightboxFotos.length) % lightboxFotos.length;
+    pintarLightbox();
+  }
+
+  // Detecta clics sobre cualquier foto de producto dentro de la cuadrícula
+  // (funciona tanto para el carrusel como para la foto única), sin interferir
+  // con los clics sobre las flechas ‹ › del carrusel.
+  grid.addEventListener("click", function (e) {
+    if (e.target.closest(".carousel-btn")) return; // ya lo maneja el listener de arriba
+    const img = e.target.closest(".card-icon img");
+    if (!img) return;
+    const contenedor = img.closest(".card-icon");
+    const fotos = JSON.parse(contenedor.dataset.images || "[]");
+    // Busca en qué posición de la lista está la foto que se clicó (para abrir el lightbox justo en esa)
+    let indice = fotos.indexOf(img.getAttribute("src"));
+    if (indice === -1) indice = 0;
+    abrirLightbox(fotos, indice, img.alt);
+  });
+
+  lightboxClose.addEventListener("click", cerrarLightbox);
+  lightboxPrev.addEventListener("click", () => moverLightbox(-1));
+  lightboxNext.addEventListener("click", () => moverLightbox(1));
+
+  lightboxOverlay.addEventListener("click", function (e) {
+    if (e.target === lightboxOverlay) cerrarLightbox(); // clic fuera de la imagen, no sobre ella
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (!lightboxOverlay.classList.contains("active")) return; // solo si el lightbox está abierto
+    if (e.key === "Escape") cerrarLightbox();
+    if (e.key === "ArrowRight") moverLightbox(1);
+    if (e.key === "ArrowLeft") moverLightbox(-1);
+  });
+
+  // Deslizar con el dedo (swipe) en pantallas táctiles para pasar de foto
+  let swipeInicioX = null;
+  lightboxImg.addEventListener("touchstart", (e) => {
+    swipeInicioX = e.touches[0].clientX;
+  });
+  lightboxImg.addEventListener("touchend", (e) => {
+    if (swipeInicioX === null) return;
+    const diferencia = e.changedTouches[0].clientX - swipeInicioX;
+    if (Math.abs(diferencia) > 40) moverLightbox(diferencia > 0 ? -1 : 1);
+    swipeInicioX = null;
   });
 </script>
 

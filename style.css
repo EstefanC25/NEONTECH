@@ -459,3 +459,127 @@ a:focus-visible, button:focus-visible {
   outline: 2px solid var(--cyan); /* Contorno cian visible al navegar con la tecla Tab */
   outline-offset: 2px;            /* Separa un poco el contorno del elemento */
 }
+
+/* ===== CURSOR "LUPA" AL PASAR SOBRE UNA FOTO DE PRODUCTO (indica que se puede ampliar) ===== */
+.card-icon img,
+.carousel-track img {
+  cursor: zoom-in;                /* Cambia el cursor para indicar que la imagen es clicable */
+}
+
+/* ===== LIGHTBOX: CAPA OSCURA QUE CUBRE TODA LA PANTALLA AL AMPLIAR UNA IMAGEN ===== */
+.lightbox-overlay {
+  display: none;                  /* Oculto por defecto, solo aparece con la clase .active */
+  position: fixed;                /* Cubre toda la ventana sin importar el scroll */
+  inset: 0;                       /* Ocupa top/right/bottom/left = 0 */
+  z-index: 100;                   /* Por encima de absolutamente todo, incluido el botón flotante de WhatsApp */
+  background: rgba(5, 6, 15, 0.92); /* Fondo casi negro, coherente con --bg-void, semitransparente */
+  backdrop-filter: blur(4px);     /* Desenfoca sutilmente lo que quede detrás */
+  align-items: center;            /* Centra la imagen verticalmente */
+  justify-content: center;        /* Centra la imagen horizontalmente */
+  padding: 2rem;                  /* Margen para que la imagen no toque los bordes en pantallas grandes */
+  cursor: zoom-out;               /* Indica que se puede hacer clic para cerrar */
+}
+
+/* ===== ESTADO ACTIVO: SE MUESTRA EL LIGHTBOX (se activa/desactiva con JavaScript) ===== */
+.lightbox-overlay.active {
+  display: flex;                  /* Al activarse, se convierte en contenedor flex para centrar la imagen */
+}
+
+/* ===== IMAGEN AMPLIADA DENTRO DEL LIGHTBOX ===== */
+.lightbox-img {
+  max-width: 90vw;                /* Nunca más ancha que el 90% de la pantalla */
+  max-height: 85vh;               /* Nunca más alta que el 85% de la pantalla */
+  border-radius: 6px;             /* Esquinas suaves, igual que el resto del sitio */
+  border: 1px solid var(--border); /* Borde sutil, mismo tono usado en las tarjetas */
+  box-shadow: 0 0 40px rgba(53,231,255,0.35), 0 0 80px rgba(255,63,198,0.15); /* Resplandor cian + magenta, coherente con la marca */
+  animation: lightbox-in 0.2s ease; /* Pequeña animación de aparición */
+}
+
+/* ===== ANIMACIÓN DE ENTRADA DE LA IMAGEN AMPLIADA ===== */
+@keyframes lightbox-in {
+  from { transform: scale(0.92); opacity: 0; } /* Empieza un poco más pequeña y transparente */
+  to   { transform: scale(1);    opacity: 1; } /* Termina en su tamaño y opacidad normales */
+}
+
+/* ===== BOTÓN "X" PARA CERRAR EL LIGHTBOX ===== */
+.lightbox-close {
+  position: fixed;                /* Fijo en la esquina, no se mueve con la imagen */
+  top: 20px;
+  right: 28px;
+  width: 40px;
+  height: 40px;
+  display: flex;                  /* Centra el símbolo "×" dentro del círculo */
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--cyan);  /* Borde cian, mismo estilo que las flechas del carrusel */
+  border-radius: 50%;             /* Forma circular */
+  color: var(--cyan);             /* Color del símbolo "×" */
+  font-size: 1.4rem;              /* Tamaño del símbolo */
+  cursor: pointer;                /* Cursor de mano */
+  background: rgba(5,6,15,0.65);  /* Fondo oscuro semitransparente para que resalte sobre cualquier foto */
+  transition: background 0.2s, box-shadow 0.2s; /* Animación suave al pasar el mouse */
+}
+
+/* ===== EFECTO AL PASAR EL MOUSE SOBRE EL BOTÓN DE CERRAR ===== */
+.lightbox-close:hover {
+  background: var(--cyan);        /* Se llena de color cian */
+  color: var(--bg-void);          /* El símbolo pasa a oscuro para mantener contraste */
+  box-shadow: 0 0 16px rgba(53,231,255,0.6); /* Resplandor alrededor del botón */
+}
+
+/* ===== FLECHAS PARA NAVEGAR ENTRE FOTOS DENTRO DEL LIGHTBOX ===== */
+.lightbox-nav {
+  position: fixed;                /* Fijas a los lados de la pantalla, no de la imagen */
+  top: 50%;                       /* A la mitad de la altura de la pantalla */
+  transform: translateY(-50%);   /* Centrado vertical exacto */
+  width: 46px;                    /* Tamaño del botón circular, más grande que las del carrusel de la tarjeta */
+  height: 46px;
+  border-radius: 50%;             /* Forma circular */
+  border: 1px solid var(--cyan);  /* Borde cian, mismo estilo del resto del sitio */
+  background: rgba(5, 6, 15, 0.65); /* Fondo oscuro semitransparente */
+  color: var(--cyan);             /* Color de la flecha */
+  font-size: 22px;                /* Tamaño del símbolo de la flecha, más grande para pantalla completa */
+  line-height: 1;
+  display: flex;                  /* Centra el símbolo dentro del botón */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 101;                   /* Por encima de la imagen ampliada */
+  transition: background 0.2s, box-shadow 0.2s; /* Animación suave al pasar el mouse */
+}
+
+/* ===== EFECTO AL PASAR EL MOUSE SOBRE UNA FLECHA DEL LIGHTBOX ===== */
+.lightbox-nav:hover {
+  background: var(--cyan);        /* Se llena de color cian */
+  color: var(--bg-void);          /* El símbolo pasa a oscuro para mantener contraste */
+  box-shadow: 0 0 18px rgba(53,231,255,0.6); /* Resplandor alrededor del botón */
+}
+
+/* ===== POSICIÓN DE CADA FLECHA DEL LIGHTBOX ===== */
+.lightbox-nav.prev { left: 24px; }  /* Flecha "anterior" pegada al borde izquierdo de la pantalla */
+.lightbox-nav.next { right: 24px; } /* Flecha "siguiente" pegada al borde derecho de la pantalla */
+
+/* ===== CONTADOR "1 / 4" DEBAJO DE LA IMAGEN AMPLIADA ===== */
+.lightbox-counter {
+  position: fixed;                /* Fijo respecto a la pantalla, no a la imagen */
+  bottom: 24px;                   /* Cerca del borde inferior */
+  left: 50%;
+  transform: translateX(-50%);   /* Centrado horizontal exacto */
+  font-family: 'Rajdhani', sans-serif; /* Misma tipografía técnica del resto del sitio */
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  font-size: 0.85rem;
+  color: var(--muted);            /* Color apagado, no compite con la imagen */
+  z-index: 101;                   /* Por encima de la imagen ampliada */
+}
+
+/* ===== EN PANTALLAS ANGOSTAS (CELULAR), LAS FLECHAS SE ACERCAN MÁS A LA IMAGEN ===== */
+@media (max-width: 600px) {
+  .lightbox-nav {
+    width: 38px;                  /* Botones un poco más pequeños en móvil */
+    height: 38px;
+    font-size: 18px;
+  }
+  .lightbox-nav.prev { left: 8px; }
+  .lightbox-nav.next { right: 8px; }
+}
