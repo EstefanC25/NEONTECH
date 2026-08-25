@@ -19,13 +19,16 @@
 
 /* ===== ESTILO GENERAL DEL BODY ===== */
 body {
-  background: var(--bg-void);       /* Aplica el color de fondo oscuro definido arriba */
+  background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('img/fondo.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--text);               /* Color de texto por defecto para toda la página */
   font-family: 'Inter', sans-serif; /* Tipografía de cuerpo (texto normal) */
   min-height: 100vh;                /* La página ocupa mínimo toda la altura de la pantalla */
   overflow-x: hidden;               /* Evita que aparezca scroll horizontal por los brillos de fondo */
 }
-
 /* ===== CAPA DE RESPLANDOR AMBIENTAL DE FONDO ===== */
 body::before {
   content: "";                  /* Elemento decorativo vacío (no tiene texto) */
@@ -104,7 +107,7 @@ header {
 /* ===== LÍNEA DIVISORA CON DEGRADADO DE COLOR ANIMADO ===== */
 .divider {
   width: min(700px, 90%);       /* Ancho: 700px como máximo, o 90% de la pantalla si es más angosta */
-  height: 1px;                  /* Línea muy delgada */
+  height: 3px;                  /* Línea muy delgada */
   margin: 1.6rem auto 0;        /* Espacio arriba y centrada horizontalmente */
   background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent); /* Degradado transparente-cian-magenta-transparente */
   background-size: 250% 100%;   /* El degradado es más ancho que la línea, para poder desplazarlo */
@@ -114,7 +117,7 @@ header {
 /* ===== ANIMACIÓN DE DESPLAZAMIENTO DEL BRILLO (solo si el usuario no pidió reducir movimiento) ===== */
 @media (prefers-reduced-motion: no-preference) {
   .divider {
-    animation: slide-glow 4s linear infinite; /* Aplica la animación de desplazamiento en bucle continuo */
+    animation: slide-glow 1s linear infinite; /* Aplica la animación de desplazamiento en bucle continuo */
   }
 }
 
