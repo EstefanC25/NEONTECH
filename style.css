@@ -625,3 +625,15 @@ a:focus-visible, button:focus-visible {
   opacity: 0;
   pointer-events: none; /* deja de bloquear clics mientras se desvanece */
 }
+
+/* ===== SPLASH EN CELULAR: imagen más pequeña para que no domine toda la pantalla ===== */
+@media (max-width: 600px) {
+  #splash img {
+    max-width: 55%;
+    max-height: 45%;
+  }
+  #splash .splash-text {
+    font-size: 1.05rem;
+    padding: 0 1.5rem;
+  }
+}
