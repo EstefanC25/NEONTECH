@@ -10,6 +10,10 @@
 </head>
 <body>
 
+<div id="splash">
+  <img src="img/bienvenida-neontech.jpeg" alt="Bienvenido a NEON TECH">
+  <p class="splash-text">Bienvenido a NEON TECH</p>
+</div>
 
 <header>
   <div class="header-row">
@@ -158,6 +162,13 @@
       </a>
     </div>
   `).join("");
+
+  // ===== SPLASH: pantalla de bienvenida, visible 5 segundos al abrir la página =====
+  setTimeout(() => {
+    const splash = document.getElementById("splash");
+    if (splash) splash.classList.add("splash-hide");
+    setTimeout(() => splash && splash.remove(), 800); // espera a que termine el fundido antes de quitarlo del DOM
+  }, 5000);
 
   document.getElementById("floatWa").href =
     `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, quisiera información sobre sus productos NEON TECH")}`;
