@@ -10,10 +10,6 @@
 </head>
 <body>
 
-<div id="splash">
-  <img src="img/bienvenida-neontech.jpeg" alt="Bienvenido a NEON TECH">
-  <p class="splash-text">Bienvenido a NEON TECH</p>
-</div>
 
 <header>
   <div class="header-row">
@@ -26,9 +22,33 @@
   <div class="divider"></div>
 </header>
 
+<div class="hero-banner" id="heroBanner">
+  <img src="img/catalogo.jpeg" alt="Ir a Catálogo" class="hero-link" data-tab="catalogo">
+  <img src="img/servicios.jpeg" alt="Ir a Servicios" class="hero-link" data-tab="servicios">
+</div>
+
+<nav class="tabs-nav">
+  <button type="button" class="tab-btn" data-tab="otros">Otros</button>
+</nav>
+
 <main>
-  <div class="section-label">Catálogo</div>
-  <div class="grid" id="grid"></div>
+  <section id="tab-catalogo" class="tab-content">
+    <button type="button" class="btn-volver">← Volver</button>
+    <div class="section-label">Catálogo</div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="tab-servicios" class="tab-content">
+    <button type="button" class="btn-volver">← Volver</button>
+    <div class="section-label">Servicios</div>
+    <div class="grid" id="gridServicios"></div>
+  </section>
+
+  <section id="tab-otros" class="tab-content">
+    <button type="button" class="btn-volver">← Volver</button>
+    <div class="section-label">Otros</div>
+    <p class="tab-placeholder">Aquí va el contenido de Otros. (Pendiente por editar)</p>
+  </section>
 </main>
 
 <a class="float-wa" id="floatWa" href="#" target="_blank" rel="noopener">
@@ -48,6 +68,40 @@
 </div>
 
 <script>
+  // ===== NAVEGACIÓN POR PESTAÑAS: Catálogo / Servicios / Otros =====
+  const heroBanner = document.getElementById("heroBanner");
+  const tabsNav = document.querySelector(".tabs-nav");
+
+  function activarTab(nombreTab) {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === nombreTab));
+    document.querySelectorAll(".tab-content").forEach(sec => sec.classList.toggle("active", sec.id === `tab-${nombreTab}`));
+    // Oculta el banner y el menú "Otros" para que la sección se vea independiente
+    heroBanner.style.display = "none";
+    tabsNav.style.display = "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function volverInicio() {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(sec => sec.classList.remove("active"));
+    heroBanner.style.display = "flex";
+    tabsNav.style.display = "flex";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => activarTab(btn.dataset.tab));
+  });
+
+  // Las imágenes del banner (Catálogo / Servicios) también activan su pestaña al hacer clic
+  document.querySelectorAll(".hero-link").forEach(img => {
+    img.addEventListener("click", () => activarTab(img.dataset.tab));
+  });
+
+  document.querySelectorAll(".btn-volver").forEach(btn => {
+    btn.addEventListener("click", volverInicio);
+  });
+
   // ⚠️ Cambia este número por el real (indicativo de país + número, sin espacios ni signos)
   const NUMERO_WHATSAPP = "573102598307";
 
@@ -163,15 +217,45 @@
     </div>
   `).join("");
 
-  // ===== SPLASH: pantalla de bienvenida, visible 5 segundos al abrir la página =====
-  setTimeout(() => {
-    const splash = document.getElementById("splash");
-    if (splash) splash.classList.add("splash-hide");
-    setTimeout(() => splash && splash.remove(), 800); // espera a que termine el fundido antes de quitarlo del DOM
-  }, 5000);
-
   document.getElementById("floatWa").href =
     `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent("Hola, quisiera información sobre sus productos NEON TECH")}`;
+
+  // ===== SERVICIOS: mantenimiento, instalación de programas, verificación de sistemas =====
+  const servicios = [
+    {
+      nombre: "Mantenimiento de computadores",
+      descripcion: "Limpieza física e interna · Cambio de pasta térmica · Revisión de ventiladores · Optimización general del equipo",
+      imagen: "img/mantenimiento.jpeg",
+      icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4" stroke-linecap="round"/><path d="M9 8.5l1.5 1.5L14 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    },
+    {
+      nombre: "Instalación de programas",
+      descripcion: "Instalación de software · Configuración de programas · Actualización de sistemas operativos · Gestión de licencias",
+      imagen: "img/instalacion.jpeg",
+      icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12" stroke-linecap="round"/><path d="M7 10l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke-linecap="round"/></svg>`
+    },
+    {
+      nombre: "Repotenciación de equipos",
+      descripcion: "Aumento de memoria RAM · Cambio a disco SSD · Optimización del sistema · Tu equipo trabaja como nuevo",
+      imagen: "img/repotenciacion.jpeg",
+      icono: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/><path d="M8 11l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    },
+  ];
+
+  const gridServicios = document.getElementById("gridServicios");
+
+  gridServicios.innerHTML = servicios.map(s => `
+    <div class="card">
+      <div class="card-icon">${s.imagen ? `<img src="${s.imagen}" alt="${s.nombre}">` : s.icono}</div>
+      <h3>${s.nombre}</h3>
+      <ul class="specs">
+        ${s.descripcion.split("·").map(item => item.trim()).filter(item => item).map(item => `<li>${item}</li>`).join("")}
+      </ul>
+      <a class="btn-wa" href="https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensajeWA(s.nombre))}" target="_blank" rel="noopener">
+        ${iconWA} Consultar
+      </a>
+    </div>
+  `).join("");
 
   // Mueve un carrusel de imágenes hacia adelante (1) o hacia atrás (-1)
   function moverCarrusel(carousel, direccion) {

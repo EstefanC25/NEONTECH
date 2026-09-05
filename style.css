@@ -587,53 +587,104 @@ a:focus-visible, button:focus-visible {
   .lightbox-nav.next { right: 8px; }
 }
 
-/* ===== SPLASH: pantalla de bienvenida al abrir la página ===== */
-#splash {
-  position: fixed;
-  inset: 0;
-  background: #000;
+/* ===== NAVEGACIÓN POR PESTAÑAS: Catálogo / Servicios / Otros ===== */
+.tabs-nav {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 1.2rem;
-  z-index: 9999;
-  opacity: 1;
-  transition: opacity 0.8s ease;
-}
-#splash img {
-  max-width: 70%;
-  max-height: 65%;
-  object-fit: contain;
-}
-#splash .splash-text {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  font-size: 1.3rem;
-  color: #fff;
-  text-shadow: 0 0 8px rgba(0, 200, 255, 0.8), 0 0 18px rgba(255, 0, 180, 0.5);
-  text-align: center;
-  margin: 0;
-  animation: splashTextFade 1.2s ease;
-}
-@keyframes splashTextFade {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-#splash.splash-hide {
-  opacity: 0;
-  pointer-events: none; /* deja de bloquear clics mientras se desvanece */
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0 1.5rem 2rem;
 }
 
-/* ===== SPLASH EN CELULAR: imagen más pequeña para que no domine toda la pantalla ===== */
-@media (max-width: 600px) {
-  #splash img {
-    max-width: 55%;
-    max-height: 45%;
-  }
-  #splash .splash-text {
-    font-size: 1.05rem;
-    padding: 0 1.5rem;
-  }
+.tab-btn {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.6rem 1.6rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  border-color: var(--cyan);
+}
+
+.tab-btn.active {
+  color: var(--bg-void);
+  background: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 14px rgba(53, 231, 255, 0.5);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tab-placeholder {
+  text-align: center;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  padding: 3rem 1.5rem;
+}
+
+/* ===== BANNER CON LA MODELO (visible en Catálogo, Servicios y Otros) ===== */
+.hero-banner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  padding: 0 1.5rem 2rem;
+}
+
+.hero-link {
+  max-width: 240px;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 30px rgba(53, 231, 255, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.hero-link:hover {
+  transform: translateY(-4px);
+  border-color: var(--cyan);
+  box-shadow: 0 0 40px rgba(53, 231, 255, 0.45);
+}
+
+/* ===== BOTÓN VOLVER (dentro de cada sección independiente) ===== */
+.btn-volver {
+  display: inline-block;
+  margin: 0 1.5rem 1.5rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  color: var(--cyan);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.5rem 1.3rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-volver:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(53, 231, 255, 0.35);
 }
