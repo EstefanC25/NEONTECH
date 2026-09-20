@@ -651,9 +651,10 @@ a:focus-visible, button:focus-visible {
 }
 
 .hero-link {
-  max-width: 240px;
-  width: 100%;
-  height: auto;
+  width: 230px;
+  max-width: 45%;
+  aspect-ratio: 5 / 8;
+  object-fit: cover;
   border-radius: 16px;
   border: 1px solid var(--border);
   box-shadow: 0 0 30px rgba(53, 231, 255, 0.25);
