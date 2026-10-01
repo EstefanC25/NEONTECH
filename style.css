@@ -313,7 +313,7 @@ main {
 
 /* ===== NOMBRE DEL PRODUCTO ===== */
 .card h3 {
-  font-family: 'Rajdhani', sans-serif; /* Tipografía técnica/condensada */
+  font-family: 'Bricolage Grotesque', sans-serif; /* Tipografía del nombre del producto */
   font-weight: 700;                     /* Negrita */
   font-size: 1.15rem;                   /* Tamaño del título del producto */
   letter-spacing: 0.02em;              /* Espaciado sutil entre letras */
